@@ -6,7 +6,6 @@ import (
 	"log"
 	"net"
 
-	// Change this for your own project
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -27,12 +26,15 @@ func (s *server) mustEmbedUnimplementedGCDServiceServer() {}
 func main() {
 	lis, err := net.Listen("tcp", ":3000")
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		logrus.Fatalf("Failed to listen: %v", err)
 	}
+
 	s := grpc.NewServer()
 	pb.RegisterGCDServiceServer(s, &server{})
 	reflection.Register(s)
+
 	logrus.Info("start grpc")
+
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
